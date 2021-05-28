@@ -1,11 +1,12 @@
+//thanks Arean for installing and configuring everything
 //It includes All the Header File
-#include "constants.h"
+/*include "constants.h"
 
 //Main Function
 int main(int argc, char *argv[])
 {
-    /*#define SDL_INIT_EVERYTHING ( SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO |
-SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER | SDL_INIT_SENSOR )*/
+    //#define SDL_INIT_EVERYTHING ( SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO |
+//SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER | SDL_INIT_SENSOR )
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         fprintf(stderr, "Error initializing SDL.\n");
@@ -167,17 +168,19 @@ SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER 
         int buttons = SDL_GetMouseState(&mousex, &mousey);
         if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
         {
-            printf("%d %d\n",mousex,mousey);
+            printf("%d %d\n", mousex, mousey);
             if (mousex >= 467 && mousex <= 827 && mousey >= 190 && mousey <= 285)
             {
                 break;
             }
         }
     }
-//=====================================================================
+    //=====================================================================
     //background
     // load the image into memory using SDL_image library function
     surface1 = IMG_Load("assets/back.png");
+    */
+   /*
     if (!surface1)
     {
         printf("error creating surface\n");
@@ -366,7 +369,6 @@ SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER 
         dest.y = (int)y_pos;
         dest.x = (int)x_pos;
 
-       
         // clear the window
         SDL_RenderClear(rend);
 
@@ -375,12 +377,12 @@ SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER 
         SDL_RenderCopy(rend, tex, NULL, &dest);
         SDL_RenderCopy(rend, tex3, NULL, &dest3);
         SDL_RenderPresent(rend);
-        
-         //Collision Detection
+
+        //Collision Detection
         // if ((up!=0 || down!=0 || left!=0 || right!=0) && dest1.x >= (dest3.x - dest1.w) && dest1.x <= (dest3.x + dest3.w) && dest1.y >= (dest3.y - dest1.h) && dest1.y <= (dest3.y + dest3.h))
         // {
         //     printf("Yes Hero And Enemy Colided\n");
-            
+
         // }
 
         // wait 1/60th of a second
@@ -395,4 +397,69 @@ SDL_INIT_EVENTS | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER 
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
     SDL_Quit();
+}
+*/
+
+#include "constants.h"
+#include "init.h"
+#include "creation.h"
+#include "tex_manage.h"
+#include "clean.h"
+#include "player.h"
+#include "enemy.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+SDL_Window* window;
+SDL_Renderer* renderer;
+SDL_Surface* surface;
+SDL_Texture* texPage1;
+SDL_Texture* texHero1;
+SDL_Event PlayerEvent1; 
+SDL_Texture* texbg1;
+SDL_Texture* texEnemy1;
+SDL_Event EnemyEvent1;
+
+int main(int argc, char* args[])
+{
+    if(intialization() == 0)
+    {
+        if(WindowCreate(window, "WOI-1971", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN) == 0);
+        {
+             unsigned int render_flag = (SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+            if(RenderCreate(renderer, window,render_flag) == 0);
+            else
+                Clean();
+        }
+
+    }
+    //Loading the 1st page
+    TextureManager firstpage;
+    firstpage.load(surface, "assets/apage.png", texPage1, renderer);
+    firstpage.DrawRectangle(texPage1, 720, 960, 0, 0);
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texPage1, NULL, NULL);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(3000);
+
+    //Loading the background page
+    TextureManager bgpage;
+    bgpage.load(surface, "assets/back.png", texbg1, renderer);
+    bgpage.DrawRectangle(texbg1, 720, 960, 0, 0);
+
+    //Loading the PlayerObject
+    Player player1;
+    player1.PlayerLoad(surface, "assets/hero1.png", texHero1, renderer);
+    player1.PlayerMoves(100, 60, 0, 500, PlayerEvent1);
+
+    //Loading the EnemyObject
+    Enemy enemy1;
+    enemy1.EnemyLoad(surface, "assets/enemy1.png", texEnemy1, renderer);
+    enemy1.EnemyMoves(100, 60, 940, 600, EnemyEvent1);
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texbg1, NULL, NULL);
+    SDL_RenderCopy(renderer, texHero1, NULL, dest_rect);
+    SDL_RenderCopy(renderer, texEnemy1, NULL, e_rect);
+    SDL_RenderPresent(renderer);
+    Clean();  
 }

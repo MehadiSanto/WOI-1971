@@ -11,7 +11,7 @@
 #define FALSE 0
 #define TRUE 1
 //Window Height Width
-#define WINDOW_WIDTH 1280 
+#define WINDOW_WIDTH 1080 
 #define WINDOW_HEIGHT 720
 
 //frame rate per Second
