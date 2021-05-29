@@ -1,7 +1,10 @@
 #include "player.h"
 
-SDL_Rect dest_rect;
 
+
+extern SDL_Window* window;
+
+//Defining a function to find out the maximum of 2 numbers(i.e. positions)
 double max(double a, double b)
 {
     if(a > b)
@@ -10,6 +13,7 @@ double max(double a, double b)
         return b;
 }
 
+//Defining a function to find out the minimum of 2 numbers(i.e. positions)
 double min(double a, double b)
 {
     if(a < b)
@@ -18,27 +22,32 @@ double min(double a, double b)
         return b;
 }
 
-typedef struct PlayerObject
+Player
 {
 
     // loading the image to the RAM
     void load(SDL_Surface *surface, const char *path, SDL_Texture *texture, SDL_Renderer *rend)
     {
+        //Loading the image by using IMG_Load
         surface = IMG_Load(path);
+
+        //Checking whether we are successful to create a surface to load an image
         if (!surface)
         {
-            printf("Surface Error: %s\n", SDL_GetError());
-            Clean();
+            printf("Surface Error: %s\n", SDL_GetError());//Printing a error message with specification
+            Clean(window, rend);
             return;
         }
 
         // loading the image data into the graphics hardware's memory from the RAM
         texture = SDL_CreateTextureFromSurface(rend, surface);
-        SDL_FreeSurface(surface);
+        SDL_FreeSurface(surface);//Freeing the surface
+
+        //Checking whether we are successful to create a texture or not
         if (!texture)
         {
-            printf("Texture Error: %s\n", SDL_GetError());
-            Clean();
+            printf("Texture Error: %s\n", SDL_GetError());//Printing a error message with specification
+            Clean(window, rend);
             return;
         }
     }
@@ -54,6 +63,8 @@ typedef struct PlayerObject
         dest_rect.y = rect_y_pos;
         double psi_x;
         double psi_y;
+
+        //Handling Event (i.e. Keyboard Event Handling)
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -68,7 +79,7 @@ typedef struct PlayerObject
                     psi_x = max(0,psi_x - FPS/10);
                     break;
                 case SDL_SCANCODE_RIGHT:
-                    psi_x = min(940 - dest_rect.x, psi_x + FPS/10)
+                    psi_x = min(940 - dest_rect.x, psi_x + FPS/10);
                     break;
                 case SDL_SCANCODE_UP:
                     psi_y = max(400, psi_y - FPS/10);
@@ -83,4 +94,5 @@ typedef struct PlayerObject
         dest_rect.y = (int) psi_y;
     }
 
-} PlayerObject;
+};
+

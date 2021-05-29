@@ -6,10 +6,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
-#include <iostream>
-using namespace std;
 
-//Initializing a subsystem
+
+//Initializing the subsystems
 int intialization();
 
 #endif

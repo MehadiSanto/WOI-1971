@@ -403,7 +403,7 @@ int main(int argc, char *argv[])
 #include "constants.h"
 #include "init.h"
 #include "creation.h"
-#include "tex_manage.h"
+#include "texturemanager.h"
 #include "clean.h"
 #include "player.h"
 #include "enemy.h"
@@ -424,15 +424,16 @@ int main(int argc, char* args[])
 {
     if(intialization() == 0)
     {
-        if(WindowCreate(window, "WOI-1971", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN) == 0);
+        if(WindowCreate(window, "WOI-1971", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN) == 0)
         {
              unsigned int render_flag = (SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
             if(RenderCreate(renderer, window,render_flag) == 0);
             else
-                Clean();
+                Clean(window, renderer);
         }
 
     }
+ 
     //Loading the 1st page
     TextureManager firstpage;
     firstpage.load(surface, "assets/apage.png", texPage1, renderer);
@@ -441,7 +442,7 @@ int main(int argc, char* args[])
     SDL_RenderCopy(renderer, texPage1, NULL, NULL);
     SDL_RenderPresent(renderer);
     SDL_Delay(3000);
-
+/*
     //Loading the background page
     TextureManager bgpage;
     bgpage.load(surface, "assets/back.png", texbg1, renderer);
@@ -462,4 +463,5 @@ int main(int argc, char* args[])
     SDL_RenderCopy(renderer, texEnemy1, NULL, e_rect);
     SDL_RenderPresent(renderer);
     Clean();  
+*/
 }
